@@ -25,7 +25,10 @@ async function callOpenAI(prompt) {
   const response = await openai.createChatCompletion({
     model: 'gpt-4',
     messages: [
-      { role: 'system', content: 'You are an educational assistant generating documents for schools.' },
+      {
+        role: 'system',
+        content: `You are an educational assistant generating documents for schools. Use a professional but friendly tone and format responses with headings or bullet points. Keep answers under 800 words, follow safeguarding guidance, use inclusive language and only reference details provided. Do not provide legal or medical advice.`
+      },
       { role: 'user', content: prompt }
     ],
     max_tokens: 800,
@@ -44,7 +47,7 @@ export const toolDefinitions = {
   behaviourSupportPlan: {
     prompt: (data) => {
       const { studentName, concerns } = data;
-      return `Generate a behaviour support plan for a pupil.\n\nPupil name: ${studentName}\nBehaviour concerns: ${concerns.join(', ')}\n\nThe plan should outline positive strategies, interventions and monitoring procedures in a friendly and supportive tone.`;
+      return `Generate a behaviour support plan for a pupil.\n\nPupil name: ${studentName}\nBehaviour concerns: ${concerns.join(', ')}\n\nUse sections for Positive Strategies, Interventions and Monitoring. Keep the tone friendly and supportive.`;
     },
     form: [
       { name: 'studentName', label: 'Student Name', type: 'text', required: true },
@@ -54,7 +57,7 @@ export const toolDefinitions = {
   attendanceImprovementPlan: {
     prompt: (data) => {
       const { cohort, currentAttendance, targetAttendance } = data;
-      return `Create an attendance improvement plan for ${cohort}. Current attendance: ${currentAttendance}%. Target attendance: ${targetAttendance}%. Outline steps to engage families, incentives, monitoring and support.`;
+      return `Create an attendance improvement plan for ${cohort}. Current attendance: ${currentAttendance}%. Target attendance: ${targetAttendance}%.\n\nInclude engagement strategies for families, incentives and a monitoring timeline.`;
     },
     form: [
       { name: 'cohort', label: 'Cohort (e.g. Year Group or Student)', type: 'text', required: true },
@@ -65,7 +68,7 @@ export const toolDefinitions = {
   lessonPlan: {
     prompt: (data) => {
       const { subject, yearGroup, objectives, duration } = data;
-      return `Design a detailed lesson plan for ${subject} (${yearGroup}). Learning objectives: ${objectives.join('; ')}. Duration: ${duration} minutes. Include a starter, main activity, differentiation and plenary.`;
+      return `Design a detailed lesson plan for ${subject} (${yearGroup}). Learning objectives: ${objectives.join('; ')}. Duration: ${duration} minutes.\n\nUse headings for Starter, Main Activity, Differentiation and Plenary.`;
     },
     form: [
       { name: 'subject', label: 'Subject', type: 'text', required: true },
@@ -77,7 +80,7 @@ export const toolDefinitions = {
   worksheet: {
     prompt: (data) => {
       const { topic, questionCount, difficulty } = data;
-      return `Generate a worksheet for the topic "${topic}" with ${questionCount} questions. Difficulty: ${difficulty}. Provide clear questions and leave space for answers.`;
+      return `Generate a worksheet for the topic "${topic}" with ${questionCount} questions. Difficulty: ${difficulty}.\n\nProvide clear questions and leave space for answers.`;
     },
     form: [
       { name: 'topic', label: 'Topic', type: 'text', required: true },
@@ -88,7 +91,7 @@ export const toolDefinitions = {
   scienceInvestigation: {
     prompt: (data) => {
       const { concept, ageGroup } = data;
-      return `Outline a science investigation for the concept of ${concept} suitable for ${ageGroup}. Include hypothesis, variables, materials, method, safety and expected outcomes.`;
+      return `Outline a science investigation for the concept of ${concept} suitable for ${ageGroup}.\n\nInclude sections for Hypothesis, Variables, Materials, Method, Safety and Expected Outcomes.`;
     },
     form: [
       { name: 'concept', label: 'Scientific Concept', type: 'text', required: true },
